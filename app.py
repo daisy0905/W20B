@@ -48,7 +48,8 @@ try:
                     print("4: modify your exploit")
                     userSelection = input()
                     if userSelection == "1":
-                        content = input("Please write a new exploit: ")
+                        print("Please write a new exploit:")
+                        content = input()
                         cursor.execute("SELECT * FROM hackers WHERE alias =? AND password =?", [alias, password])
                         row = cursor.fetchone()
                         id = row[2]
@@ -60,7 +61,7 @@ try:
                             print("Shame, exploit has not been created!")
 
                     elif userSelection == "2":
-                        cursor.execute("SELECT * FROM exploits INNER JOIN hackers ON alias=? AND exploits.user_id = hackers.id", [alias,])
+                        cursor.execute("SELECT * FROM exploits INNER JOIN hackers ON alias=? AND password=? AND exploits.user_id = hackers.id", [alias, password])
                         contents = cursor.fetchall()
                         for content in contents:
                             print(content[1])
@@ -71,8 +72,8 @@ try:
                         for row in rows:
                             if alias != row[3]:
                                 print(row[1])
-                            # else:
-                            #     print("Sorry, results don't match!")
+                            else:
+                                pass
                     elif userSelection == "4":
                         cursor.execute("SELECT * FROM hackers WHERE alias =? AND password =?", [alias, password])
                         row = cursor.fetchone()
@@ -81,7 +82,8 @@ try:
                         cursor.execute("SELECT * FROM exploits WHERE user_id=?", [id])
                         contents = cursor.fetchall()
                         print(contents)
-                        new_content = input("Please type your new exploit: ")
+                        print("Please type your new exploit:")
+                        new_content = input()
                         pick_id = input("Please type id of exploits you would like to modify: ")
                         for content in contents:
                             if int(pick_id) == content[0]:
@@ -101,9 +103,9 @@ try:
                         for updated_content in updated_contents:
                             print(updated_content[1])
 
-                        if exit_check():
-                            print("Goodbye!")
-                            break
+                    if exit_check():
+                        print("Goodbye!")
+                        break
                 break
 
 except mariadb.ProgrammingError:
